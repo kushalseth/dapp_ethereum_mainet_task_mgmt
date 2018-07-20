@@ -7,6 +7,10 @@
         - Deploying Smart contract on Rospten network\Ethereum main network
         - EthereumScan
 
+    
+    I have left MetaCoin.sol as it is as the user can play with default template, if they want. If you just want 
+    the basic structure of DAPP, please refer this repo: https://github.com/KushalGH/dapp_metacoin_testrpc_metamask     
+
 
 # Development Environment
     
@@ -45,12 +49,18 @@
         - (note: Please run these commands at the project location)
 
     - testrpc ususally works on localhost:8545 so we will connect to Ethereum local network in meta mask
+    - npm run dev -- [http://localhost:8080/] to run this default structure
+    - You can play with MetaCoin Application to understand the flow.
+    - You can import accounts of testrpc to metamask using "import Account". This account will also have 100 Ethers.
+    - Try to add an account and tramsfer some money from Account 1 (owner) to Account 2. You have to refresh the application 
+      to see the META coin balance for the account.
 
 
     # IMPORTANT NOTES: I would like to share some important things here
     1. When you run testrpc, you will get a Menonic in the powershell.
     2. copy that  Menonic and open metamask in chrome.
     3. Login using Menonic and set the password. You will receive 100 ETHER if yours testrpc is connected to metamask.
+       Also notice that the first address of your testrpc will get added to metamask.
     4. Run truffle compile. It should show you compiling.
     5. truffle migrate should run 1_initial_migrtae.js and 2_deploy_contracts.js                                     
 
