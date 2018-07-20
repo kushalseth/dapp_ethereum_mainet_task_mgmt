@@ -1,0 +1,24 @@
+################################################################################
+# This .gitignore file for DAPP
+################################################################################
+
+
+# Build results
+
+[Dd]ebug/
+[Rr]elease/
+x64/
+build/
+[Bb]in/
+[Oo]bj/
+
+# MSTest test Results
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+
+[Bb]in
+[Dd]ebug*/
+[Rr]elease*/
+
+
+node_modules/
