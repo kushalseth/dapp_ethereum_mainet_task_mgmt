@@ -30,7 +30,7 @@
         - ropsten faucet (https://faucet.metamask.io/)
 
 
-# Building the structure for DAPP
+# Building the basic structure for DAPP
 
     (note: Please run these commands at the project location)
     - mkdir taskdapp
