@@ -8,8 +8,50 @@
         - EthereumScan
 
     
-    I have left MetaCoin.sol as it is as the user can play with default template, if they want. If you just want 
+    I have left MetaCoin.sol as it is, The user can play with default template, if they want. If you just want 
     the basic structure of DAPP, please refer this repo: https://github.com/KushalGH/dapp_metacoin_testrpc_metamask     
+
+
+# USE CASE: TASK MANAGEMENT FOR GOVERNMENT OFFICIALS\PROFESSTIONALS HAVING INTER DEPENDENCY
+
+    I am focusing on sectors\organizations who has interdependency in work. I believe blockchain can help to fasten the 
+    speed of work between the organizations, where they can track the current status of the work.
+
+
+# WHY BLOCKCHAIN 
+
+    Whenever I start any work on BLOCKCHAIN, I just focus on few things,
+
+## IS THE TRUST LACKING IN THIS SCENARIO:##
+    Let's take an example of Government raising the fund for building a 
+    flyover in a city. A private compony took the contract to build it. Multiple departments of both the governing bodies 
+    are involved in this contract.
+
+        **We cannot exactly trace** 
+    
+        - The work which is happening in particular department. We can just ask them the status, 
+          and that too could be a single liner, "WORK IN PROGRESS!!"
+    
+        - If a department is actually putting the amount of money they are charging.
+
+        - If a particular department is exactly working on this or not.
+    
+        **How blockchain will resolve**
+        - We can build a Blockchain environment where we can track and validate the complete scenario. 
+        - We can build a single source of trust among the organizations.
+        - If any department feels he can raise an action for the department. 
+        - Repotation of the department can be tracked.
+
+## WHY NOT CENTRALISED SYSTEM
+
+    All the departments will have there own management systems. If eveyone aggress, they can build a centralised 
+    system but in that case, that will be handled by few Admins. Again, increasing the cases of fraud.
+
+# Phase 0: 
+
+    In this phase, I will just try to build a simple DAPP that will focus on single organization managing there
+    internal tasks, just to have a POC ready. In next phases, I will upgrade the contract to store multiple 
+    organizations and slowly will move the project to have scenarios ready for my Use Case.     
 
 
 # Development Environment
@@ -62,6 +104,10 @@
     3. Login using Menonic and set the password. You will receive 100 ETHER if yours testrpc is connected to metamask.
        Also notice that the first address of your testrpc will get added to metamask.
     4. Run truffle compile. It should show you compiling.
-    5. truffle migrate should run 1_initial_migrtae.js and 2_deploy_contracts.js                                     
+    5. truffle migrate should run 1_initial_migrtae.js and 2_deploy_contracts.js   
+    6. You should see default MetaCoin on the DAPP page.     
+
+
+                            
 
 
