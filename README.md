@@ -49,7 +49,7 @@
 
 # Phase 0: 
 
-    In this phase, I will just try to build a simple DAPP that will focus on single organization managing there
+    In this phase, I will just try to build a simple DAPP that will focus on single organization managing there few
     internal tasks, just to have a POC ready. In next phases, I will upgrade the contract to store multiple 
     organizations and slowly will move the project to have scenarios ready for my Use Case.     
 
