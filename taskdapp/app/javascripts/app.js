@@ -1,102 +1,198 @@
-// Import the page's CSS. Webpack will know what to do with it.
-import "../stylesheets/app.css";
+// Import the page's CSS.
+import '../stylesheets/app.css'
 
-// Import libraries we need.
-import { default as Web3} from 'web3';
+// Import Web3 libraries.
+import { default as Web3 } from 'web3'
 import { default as contract } from 'truffle-contract'
 
 // Import our contract artifacts and turn them into usable abstractions.
-import metacoin_artifacts from '../../build/contracts/MetaCoin.json'
+import taskMgmtArtifacts from '../../build/contracts/TaskManagement.json'
 
-// MetaCoin is our usable abstraction, which we'll use through the code below.
-var MetaCoin = contract(metacoin_artifacts);
+// TaskMgmt is our usable abstraction, which we'll use through the code below.
+let TaskMgmt = contract(taskMgmtArtifacts)
 
 // The following code is simple to show off interacting with your contracts.
 // As your needs grow you will likely need to change its form and structure.
 // For application bootstrapping, check out window.addEventListener below.
-var accounts;
-var account;
+let accounts;
+let account;
+let pressed = false;
 
 window.App = {
-  start: function() {
-    var self = this;
+  start: function () {
+    debugger;
+    // Bootstrap the TaskMgmt abstraction for Use.
+    TaskMgmt.setProvider(web3.currentProvider) 
+    this.getAccountsFromWeb3()
+      .then(_accounts => this.initializeApplication(_accounts))
+      .catch(err => alert('There was an error fetching your accounts.')) //Produce an error if there is no account present.
+  },
 
-    // Bootstrap the MetaCoin abstraction for Use.
-    MetaCoin.setProvider(web3.currentProvider);
+  // Getting the accounts from web3
+  getAccountsFromWeb3: function() {
+    return new Promise((resolve, reject) => {
+      web3.eth.getAccounts((e, accounts) => {
+        console.group("METHOD: getAccountsFromWeb3()");
+        console.log("e ===", e);
+        console.log("accounts ===", accounts);        
+        console.groupEnd();        
+        if(e != null) {
+            reject(e);
+        }
+        else {
+            resolve(accounts);
+        }
+      })  
+    })
+  },
 
-    // Get the initial account balance so it can be displayed.
-    web3.eth.getAccounts(function(err, accs) {
-      if (err != null) {
-        alert("There was an error fetching your accounts.");
-        return;
+
+  initializeApplication: function (_accounts) {
+    debugger;
+    console.group("METHOD: initializeApplication()");
+    console.log("Input Parameter ===", _accounts);        
+    console.groupEnd();  
+    if (_accounts.length === 0) {
+      alert("Couldn't get any accounts! Make sure your Ethereum client is configured correctly.")
+      return
+    }
+    accounts = _accounts
+    account = accounts[0]
+
+    this.watchEvents()
+    this.getTxnsHistory()
+  },
+
+  watchEvents: function() {
+    debugger;
+    console.group("METHOD: watchEvents()");
+          
+    console.groupEnd(); 
+    TaskMgmt.deployed().then(instance => instance.LogNewAddedTask().watch(function(error, result) {
+        console.group("Inside LogNewAddedTask()");
+        console.log("result ===", result); 
+        console.groupEnd(); 
+        (error, result) => this.postLogNewAddedTask(error, result)      
+    }))
+  },
+
+  postLogNewAddedTask: function (error, result) {
+    debugger;
+    if (!error && pressed) {
+      this.addRow(result.args.id, result.args.task, result.args.status, 
+                  result.args.assignedTo, result.args.year, result.args.month,
+                  result.args.date);
+      pressed = false
+    }
+  },
+
+  addRow: function (id, task, status, assignedTo, year, month, date) {
+    debugger;
+    let tableRef = document.getElementById('taskTable').getElementsByTagName('tbody')[0]
+
+    // Insert a row in the table at the last row
+    let newRow = tableRef.insertRow(tableRef.rows.length)
+
+    // Insert a cell in the row at index 0
+    let newIdCell = newRow.insertCell(0)
+    let newTaskCell = newRow.insertCell(1)
+    let newStatusCell = newRow.insertCell(2)
+    let newAssignedToCell = newRow.insertCell(3)
+    let newDateCell = newRow.insertCell(4) 
+
+    // Append a text node to the cell
+    let newId = document.createTextNode(id.toNumber())
+    let newTask = document.createTextNode(task)
+     let newStatus = document.createTextNode(status)
+     let newAssignedTo = newRow.insertCell(assignedTo)     
+    let newTime = document.createTextNode(year + month + date)
+
+
+    newIdCell.appendChild(newId)
+    newTaskCell.appendChild(newTask)
+    newTimeCell.appendChild(newTime)
+    newStatusCell.appendChild(newStatus)
+    newAssignedToCell.appendChild(newAssignedTo)
+
+    document.getElementById('IP_taskId').value = ''
+    document.getElementById('IP_task').value = ''
+    document.getElementById('IP_startDate').value = ''
+    document.getElementById('IP_Status').value = ''
+    document.getElementById('IP_AssignTo').value = ''
+  },
+
+  addTask: function () {
+    debugger;
+    TaskMgmt.deployed()
+      .then(instance => this.addFormData(instance))
+      .then(tx => console.log(tx.logs[0].args))
+      .catch(e => console.error(e))
+  },
+
+  addFormData: function (instance) {
+    debugger;
+    pressed = true
+    let newId = parseInt(document.getElementById('id').value);
+    let newTask = document.getElementById('task').value;
+    //let newTime = document.getElementById('time').value
+    let status = "Done";
+    let assignTo = "Kushal Seth";
+    let year = "2018";
+    let month = "7";
+    let date = "23";
+    return instance.addTask(newId, newTask, status, assignTo, 
+                       year, month, date, { from: account, gas: 3000000 })
+  },
+
+  getTxnsHistory: function () {
+    debugger;
+
+    TaskMgmt.deployed()
+      .then(instance => instance.getTotalTasksCount())
+      .then(count => this.postTotalTasksCount(count))
+      .catch(e => console.log("error in getTxnsHistory"));
+
+  },
+
+  postTotalTasksCount: function (count) {
+    debugger;
+    console.log("count:", count, count.valueOf());
+    if (count.valueOf() > 0) {
+      for (let i = 0; i < count.valueOf(); i++) {
+        this.getTaskIdByIndex(i)
       }
-
-      if (accs.length == 0) {
-        alert("Couldn't get any accounts! Make sure your Ethereum client is configured correctly.");
-        return;
-      }
-
-      accounts = accs;
-      account = accounts[0];
-
-      self.refreshBalance();
-    });
+    }
   },
 
-  setStatus: function(message) {
-    var status = document.getElementById("status");
-    status.innerHTML = message;
+  getTaskIdByIndex: function (i) {
+    debugger;
+    TaskMgmt.deployed()
+      .then(instance => instance.getTaskIdByIndex(i))
+      .then(id => this.getTaskById(id))
+      .catch(e => console.error(e))
   },
 
-  refreshBalance: function() {
-    var self = this;
-
-    var meta;
-    MetaCoin.deployed().then(function(instance) {
-      meta = instance;
-      return meta.getBalance.call(account, {from: account});
-    }).then(function(value) {
-      var balance_element = document.getElementById("balance");
-      balance_element.innerHTML = value.valueOf();
-    }).catch(function(e) {
-      console.log(e);
-      self.setStatus("Error getting balance; see log.");
-    });
-  },
-
-  sendCoin: function() {
-    var self = this;
-
-    var amount = parseInt(document.getElementById("amount").value);
-    var receiver = document.getElementById("receiver").value;
-
-    this.setStatus("Initiating transaction... (please wait)");
-
-    var meta;
-    MetaCoin.deployed().then(function(instance) {
-      meta = instance;
-      return meta.sendCoin(receiver, amount, {from: account});
-    }).then(function() {
-      self.setStatus("Transaction complete!");
-      self.refreshBalance();
-    }).catch(function(e) {
-      console.log(e);
-      self.setStatus("Error sending coin; see log.");
-    });
+  getTaskById: function (id) {
+    debugger;
+    TaskMgmt.deployed()
+      .then(instance => instance.getTaskById(id.valueOf()))
+      .then(values => this.addRow(id, values[0], values[1]))
+      .catch(e => console.error("error in getTaskbyid ", e))
   }
-};
+}
 
-window.addEventListener('load', function() {
+window.addEventListener('load', function () {
+  debugger;
   // Checking if Web3 has been injected by the browser (Mist/MetaMask)
   if (typeof web3 !== 'undefined') {
     console.warn("Using web3 detected from external source. If you find that your accounts don't appear or you have 0 MetaCoin, ensure you've configured that source properly. If using MetaMask, see the following link. Feel free to delete this warning. :) http://truffleframework.com/tutorials/truffle-and-metamask")
     // Use Mist/MetaMask's provider
-    window.web3 = new Web3(web3.currentProvider);
+    window.web3 = new Web3(web3.currentProvider)
   } else {
-    console.warn("No web3 detected. Falling back to http://127.0.0.1:9545. You should remove this fallback when you deploy live, as it's inherently insecure. Consider switching to Metamask for development. More info here: http://truffleframework.com/tutorials/truffle-and-metamask");
+    console.warn("No web3 detected. Falling back to http://localhost:8545. You should remove this fallback when you deploy live, as it's inherently insecure. Consider switching to Metamask for development. More info here: http://truffleframework.com/tutorials/truffle-and-metamask")
     // fallback - use your fallback strategy (local node / hosted node + in-dapp id mgmt / fail)
-    window.web3 = new Web3(new Web3.providers.HttpProvider("http://127.0.0.1:9545"));
+    window.web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'))
   }
 
-  App.start();
-});
+  App.start()
+})

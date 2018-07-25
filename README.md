@@ -6,9 +6,10 @@
         - Truffle
         - Deploying Smart contract on Rospten network\Ethereum main network
         - EthereumScan
+        - Solidity
 
     
-    I have left MetaCoin.sol as it is, The user can play with default template, if they want. If you just want 
+    The user can play with default template, if they want. If you just want 
     the basic structure of DAPP, please refer this repo: https://github.com/KushalGH/dapp_metacoin_testrpc_metamask     
 
 
@@ -22,7 +23,7 @@
 
     Whenever I start any work on BLOCKCHAIN, I just focus on few things,
 
-## IS THE TRUST LACKING IN THIS SCENARIO:##
+##IS THE TRUST LACKING IN THIS SCENARIO:
     Let's take an example of Government raising the fund for building a 
     flyover in a city. A private compony took the contract to build it. Multiple departments of both the governing bodies 
     are involved in this contract.
@@ -42,16 +43,18 @@
         - If any department feels he can raise an action for the department. 
         - Repotation of the department can be tracked.
 
-## WHY NOT CENTRALISED SYSTEM
+##WHY NOT CENTRALISED SYSTEM
 
     All the departments will have there own management systems. If eveyone aggress, they can build a centralised 
     system but in that case, that will be handled by few Admins. Again, increasing the cases of fraud.
 
 # Phase 0: 
 
-    In this phase, I will just try to build a simple DAPP that will focus on single organization managing there few
-    internal tasks, just to have a POC ready. In next phases, I will upgrade the contract to store multiple 
-    organizations and slowly will move the project to have scenarios ready for my Use Case.     
+    In this phase, I will just try to build a simple DAPP that will focus on single project where we can add multiple
+    tasks, assign to the authorities, set some starting parameters, etc. just to have a POC ready. 
+    
+    In next phases, I will upgrade the contract to store multiple organizations and slowly will move the project to 
+    have scenarios ready for my Use Case.     
 
 
 # Development Environment
@@ -92,10 +95,7 @@
 
     - testrpc ususally works on localhost:8545 so we will connect to Ethereum local network in meta mask
     - npm run dev -- [http://localhost:8080/] to run this default structure
-    - You can play with MetaCoin Application to understand the flow.
     - You can import accounts of testrpc to metamask using "import Account". This account will also have 100 Ethers.
-    - Try to add an account and tramsfer some money from Account 1 (owner) to Account 2. You have to refresh the application 
-      to see the META coin balance for the account.
 
 
     # IMPORTANT NOTES: I would like to share some important things here
@@ -105,7 +105,7 @@
        Also notice that the first address of your testrpc will get added to metamask.
     4. Run truffle compile. It should show you compiling.
     5. truffle migrate should run 1_initial_migrtae.js and 2_deploy_contracts.js   
-    6. You should see default MetaCoin on the DAPP page.     
+    6. You should see DAPP page.     
 
 
                             
