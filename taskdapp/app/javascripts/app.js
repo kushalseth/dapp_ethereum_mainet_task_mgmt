@@ -20,7 +20,6 @@ let pressed = false;
 
 window.App = {
   start: function () {
-    debugger;
     // Bootstrap the TaskMgmt abstraction for Use.
     TaskMgmt.setProvider(web3.currentProvider) 
     this.getAccountsFromWeb3()
@@ -48,7 +47,7 @@ window.App = {
 
 
   initializeApplication: function (_accounts) {
-    debugger;
+
     console.group("METHOD: initializeApplication()");
     console.log("Input Parameter ===", _accounts);        
     console.groupEnd();  
@@ -64,7 +63,7 @@ window.App = {
   },
 
   watchEvents: function() {
-    debugger;
+
     console.group("METHOD: watchEvents()");
           
     console.groupEnd(); 
@@ -77,7 +76,7 @@ window.App = {
   },
 
   postLogNewAddedTask: function (error, result) {
-    debugger;
+    
     if (!error && pressed) {
       this.addRow(result.args.id, result.args.task, result.args.status, 
                   result.args.assignedTo, result.args.year, result.args.month,
@@ -87,7 +86,7 @@ window.App = {
   },
 
   addRow: function (id, task, status, assignedTo, year, month, date) {
-    debugger;
+    
     let tableRef = document.getElementById('taskTable').getElementsByTagName('tbody')[0]
 
     // Insert a row in the table at the last row
@@ -122,7 +121,7 @@ window.App = {
   },
 
   addTask: function () {
-    debugger;
+    
     TaskMgmt.deployed()
       .then(instance => this.addFormData(instance))
       .then(tx => console.log(tx.logs[0].args))
@@ -130,13 +129,13 @@ window.App = {
   },
 
   addFormData: function (instance) {
-    debugger;
+    
     pressed = true
-    let newId = parseInt(document.getElementById('id').value);
-    let newTask = document.getElementById('task').value;
+    let newId = parseInt(document.getElementById('IP_taskId').value);
+    let newTask = document.getElementById('IP_task').value;
     //let newTime = document.getElementById('time').value
-    let status = "Done";
-    let assignTo = "Kushal Seth";
+    let status = document.getElementById('IP_Status').value;
+    let assignTo = document.getElementById('IP_AssignTo').value;
     let year = "2018";
     let month = "7";
     let date = "23";
@@ -145,7 +144,7 @@ window.App = {
   },
 
   getTxnsHistory: function () {
-    debugger;
+    
 
     TaskMgmt.deployed()
       .then(instance => instance.getTotalTasksCount())
@@ -155,7 +154,7 @@ window.App = {
   },
 
   postTotalTasksCount: function (count) {
-    debugger;
+    
     console.log("count:", count, count.valueOf());
     if (count.valueOf() > 0) {
       for (let i = 0; i < count.valueOf(); i++) {
@@ -165,7 +164,7 @@ window.App = {
   },
 
   getTaskIdByIndex: function (i) {
-    debugger;
+    
     TaskMgmt.deployed()
       .then(instance => instance.getTaskIdByIndex(i))
       .then(id => this.getTaskById(id))
@@ -173,7 +172,7 @@ window.App = {
   },
 
   getTaskById: function (id) {
-    debugger;
+    
     TaskMgmt.deployed()
       .then(instance => instance.getTaskById(id.valueOf()))
       .then(values => this.addRow(id, values[0], values[1]))
@@ -182,7 +181,7 @@ window.App = {
 }
 
 window.addEventListener('load', function () {
-  debugger;
+  
   // Checking if Web3 has been injected by the browser (Mist/MetaMask)
   if (typeof web3 !== 'undefined') {
     console.warn("Using web3 detected from external source. If you find that your accounts don't appear or you have 0 MetaCoin, ensure you've configured that source properly. If using MetaMask, see the following link. Feel free to delete this warning. :) http://truffleframework.com/tutorials/truffle-and-metamask")
